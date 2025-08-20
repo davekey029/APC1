@@ -3,53 +3,84 @@
 int main() {     
   
   int opcao;
-  float num1, num2, resultado;     
+  float num1, num2, resultado; 
+  char entrada[50];
    // Função principal obrigatória
   do
   {
 
   printf("\n=== Calculadora ===\n");
     printf("1. Soma\n");
-    printf("2. Subtração\n");
-    printf("3. Multiplicação\n");
-    printf("4. Divisão\n");
+    printf("2. Subtracao\n");
+    printf("3. Multiplicacao\n");
+    printf("4. Divisao\n");
     printf("5. Sair\n");
-    printf("Escolha uma opção: ");
-    scanf("%d", &opcao);
+
+    if (fgets(entrada, sizeof(entrada), stdin) == NULL || entrada[0] == '\n') {
+    printf("Entrada invalida! Por favor, insira uma opcao valida.\n");
+    continue;
+    }
+    if (sscanf(entrada, "%d", &opcao) != 1) {
+    printf("Entrada invalida! Por favor, insira uma opcao valida.\n");
+    continue;
+    }
     
     if (opcao >= 1 && opcao <= 4) {
-            printf("Digite o primeiro número: ");
-            scanf("%f", &num1);
-            printf("Digite o segundo número: ");
-            scanf("%f", &num2);
+            // Validação da entrada para o primeiro número
+            do {
+                printf("Digite o primeiro numero: ");
+                if (fgets(entrada, sizeof(entrada), stdin) == NULL || entrada[0] == '\n') {
+                    printf("Entrada invalida! Por favor, insira um numero valido.\n");
+                    continue;
+                }
+                if (sscanf(entrada, "%f", &num1) != 1) {
+                    printf("Entrada invalida! Por favor, insira um numero valido.\n");
+                    continue;
+                }
+                break;
+            } while (1);
+
+            // Validação da entrada para o segundo número
+            do {
+                printf("Digite o segundo numero: ");
+                if (fgets(entrada, sizeof(entrada), stdin) == NULL || entrada[0] == '\n') {
+                    printf("Entrada invalida! Por favor, insira um numero valido.\n");
+                    continue;
+                }
+                if (sscanf(entrada, "%f", &num2) != 1) {
+                    printf("Entrada invalida! Por favor, insira um numero valido.\n");
+                    continue;
+                }
+                break;
+            } while (1);
     }
     
     switch (opcao) {
             case 1:
                 resultado = num1 + num2;
-                printf("Resultado: %.2f\n", resultado);
+                printf("A soma de %.2f + %.2f = %.2f\n", num1, num2, resultado);
                 break;
             case 2:
                 resultado = num1 - num2;
-                printf("Resultado: %.2f\n", resultado);
+                printf("A subtracao de %.2f - %.2f = %.2f\n", num1, num2, resultado);
                 break;
             case 3:
                 resultado = num1 * num2;
-                printf("Resultado: %.2f\n", resultado);
+                printf("A multiplicacao de %.2f * %.2f é igual a %.2f\n", num1, num2, resultado);
                 break;
             case 4:
                 if (num2 != 0) {
                     resultado = num1 / num2;
-                    printf("Resultado: %.2f\n", resultado);
+                    printf("A divisao de %.2f por %.2f é igual a %.2f\n", num1, num2, resultado);
                 } else {
-                    printf("Erro: Divisão por zero não é permitida.\n");
+                    printf("Erro: Divisao por zero nao permitida.\n");
                 }
                 break;
             case 5:
                 printf("Saindo...\n");
                 break;
             default:
-                printf("Opção inválida. Tente novamente.\n");
+                printf("Opçao invalida. Tente novamente.\n");
     }
 
   } while (opcao != 5);
