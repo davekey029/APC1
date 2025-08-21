@@ -1,71 +1,74 @@
 #include <stdio.h>
 #include <string.h> // Para usar strcpy
+#include <locale.h> // Para configurar o locale para português
 
-// DefiniÃ§Ã£o da estrutura para armazenar os dados de cada operaÃ§Ã£o
+// Definição da estrutura para armazenar os dados de cada operação
 typedef struct {
     float num1;
     float num2;
-    char operacao[20]; // Ex: "Soma", "Subtracao"
+    char operacao[20]; // Operação como string (pode ser "+", "-", "*", "/")
     float resultado;
 } Operacao;
 
-#define MAX_OPERACOES 100 // Tamanho mÃ¡ximo do histÃ³rico
+#define MAX_OPERACOES 100 // Definindo o tamanho máximo do histórico de operações
 
 int main() {
+    setlocale(LC_ALL, "Portuguese"); // Configura o locale para português
+
     int opcao;
     float num1, num2, resultado;
     char entrada[50];
-    Operacao historico[MAX_OPERACOES]; // Array para armazenar o histÃ³rico
-    int contador = 0; // Contador para rastrear o nÃºmero de operaÃ§Ãµes realizadas
+    Operacao historico[MAX_OPERACOES]; // Array para armazenar o histórico de operações
+    int contador = 0; // Contador para o número de operações realizadas
 
     do {
         printf("\n=== Calculadora ===\n");
         printf("1. Soma\n");
-        printf("2. Subtracao\n");
-        printf("3. Multiplicacao\n");
-        printf("4. Divisao\n");
-        printf("5. Exibir Historico\n");
+        printf("2. Subtracão\n");
+        printf("3. Multiplicacão\n");
+        printf("4. Divisão\n");
+        printf("5. Exibir Histórico\n");
         printf("6. Sair\n");
 
         if (fgets(entrada, sizeof(entrada), stdin) == NULL || entrada[0] == '\n') {
-            printf("Entrada invalida! Por favor, insira uma opcao valida.\n");
+            printf("Entrada inválida! Por favor, insira uma opcao válida.\n");
             continue;
         }
         if (sscanf(entrada, "%d", &opcao) != 1) {
-            printf("Entrada invalida! Por favor, insira uma opcao valida.\n");
+            printf("Entrada inválida! Por favor, insira uma opcao válida.\n");
             continue;
         }
 
         if (opcao >= 1 && opcao <= 4) {
-            // ValidaÃ§Ã£o da entrada para o primeiro nÃºmero
+            // Validação da entrada para o primeiro número
             do {
-                printf("Digite o primeiro numero: ");
+                printf("Digite o primeiro número: ");
                 if (fgets(entrada, sizeof(entrada), stdin) == NULL || entrada[0] == '\n') {
-                    printf("Entrada invalida! Por favor, insira um numero valido.\n");
+                    printf("Entrada inválida! Por favor, insira um número válido.\n");
                     continue;
                 }
                 if (sscanf(entrada, "%f", &num1) != 1) {
-                    printf("Entrada invalida! Por favor, insira um numero valido.\n");
+                    printf("Entrada inválida! Por favor, insira um número válido.\n");
                     continue;
                 }
                 break;
             } while (1);
 
-            // ValidaÃ§Ã£o da entrada para o segundo nÃºmero
+            // Validação da entrada para o segundo número
             do {
-                printf("Digite o segundo numero: ");
+                printf("Digite o segundo número: ");
                 if (fgets(entrada, sizeof(entrada), stdin) == NULL || entrada[0] == '\n') {
-                    printf("Entrada invalida! Por favor, insira um numero valido.\n");
+                    printf("Entrada inválida! Por favor, insira um número válido.\n");
                     continue;
                 }
                 if (sscanf(entrada, "%f", &num2) != 1) {
-                    printf("Entrada invalida! Por favor, insira um numero valido.\n");
+                    printf("Entrada inválida! Por favor, insira um número válido.\n");
                     continue;
                 }
                 break;
             } while (1);
 
-            // Realiza a operaÃ§Ã£o e armazena no histÃ³rico
+            // Realiza a operação selecionada
             switch (opcao) {
                 case 1:
                     resultado = num1 + num2;
@@ -74,50 +77,50 @@ int main() {
                     break;
                 case 2:
                     resultado = num1 - num2;
-                    printf("A subtracao de %.2f - %.2f = %.2f\n", num1, num2, resultado);
+                    printf("A subtração de %.2f - %.2f = %.2f\n", num1, num2, resultado);
                     strcpy(historico[contador].operacao, "-");
                     break;
                 case 3:
                     resultado = num1 * num2;
-                    printf("A multiplicacao de %.2f * %.2f = %.2f\n", num1, num2, resultado);
+                    printf("A multiplicação de %.2f * %.2f = %.2f\n", num1, num2, resultado);
                     strcpy(historico[contador].operacao, "*");
                     break;
                 case 4:
                     if (num2 != 0) {
                         resultado = num1 / num2;
-                        printf("A divisao de %.2f / %.2f = %.2f\n", num1, num2, resultado);
+                        printf("A divisão de %.2f / %.2f = %.2f\n", num1, num2, resultado);
                         strcpy(historico[contador].operacao, "/");
                     } else {
-                        printf("Erro: Divisao por zero nao permitida.\n");
-                        continue; // NÃ£o armazena no histÃ³ricos
+                        printf("Erro: Divisão por zero não é permitida!\n");
+                        continue; // Pula para a próxima iteração do loop se a divisão por zero for tentada
                     }
                     break;
             }
 
-            // Armazena os dados no histÃ³rico
+            // Armazena a operação no histórico
             historico[contador].num1 = num1;
             historico[contador].num2 = num2;
             historico[contador].resultado = resultado;
             contador++;
 
-            // Verifica se o histÃ³rico estÃ¡ cheio
+            // Verifica se o contador ultrapassou o limite do histórico
             if (contador >= MAX_OPERACOES) {
                 printf("Historico cheio! Novas operacoes nao serao armazenadas.\n");
                 contador = MAX_OPERACOES; // Garante que nÃ£o ultrapasse o limite
             }
         } else if (opcao == 5) {
-            // Exibe o histÃ³rico de operaÃ§Ãµes
-            printf("\n=== Historico de Operacoes ===\n");
+            // Exibe o histórico de operações
+            printf("\n=== Historico de Operações ===\n");
             for (int i = 0; i < contador; i++) {
                 printf("%d: %.2f %s %.2f = %.2f\n", i + 1, historico[i].num1, historico[i].operacao, historico[i].num2, historico[i].resultado);
             }
             if (contador == 0) {
-                printf("Nenhuma operacao realizada ainda.\n");
+                printf("Nenhuma operação realizada ainda.\n");
             }
         } else if (opcao == 6) {
             printf("Saindo...\n");
         } else {
-            printf("Opcao invalida! Tente novamente.\n");
+            printf("Opção inválida! Tente novamente.\n");
         }
     } while (opcao != 6);
 
